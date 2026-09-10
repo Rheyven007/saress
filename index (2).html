@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For Saress 💜</title>
+<style>
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #e6dbf7, #c9a7eb, #a17fe0);
+    background-size: 400% 400%;
+    animation: gradientMove 12s ease infinite;
+    overflow: hidden;
+    position: relative;
+  }
+
+  @keyframes gradientMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  .card {
+    background: rgba(255, 255, 255, 0.85);
+    border-radius: 24px;
+    padding: 40px 35px;
+    max-width: 420px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 20px 50px rgba(106, 27, 154, 0.3);
+    position: relative;
+    z-index: 2;
+    animation: popIn 0.8s ease;
+  }
+
+  @keyframes popIn {
+    from { transform: scale(0.7); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+
+  h1 {
+    color: #6a1b9a;
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+  }
+
+  p {
+    color: #4a148c;
+    font-size: 1.05rem;
+    line-height: 1.5;
+    margin-bottom: 30px;
+  }
+
+  .emoji {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+  }
+
+  .buttons {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    min-height: 80px;
+  }
+
+  button {
+    border: none;
+    border-radius: 50px;
+    padding: 14px 28px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s ease, background 0.3s ease;
+  }
+
+  #yesBtn {
+    background: #6a1b9a;
+    color: white;
+    box-shadow: 0 8px 20px rgba(106, 27, 154, 0.4);
+    transition: all 0.25s ease;
+    position: relative;
+    z-index: 3;
+  }
+
+  #yesBtn:hover {
+    background: #4a148c;
+  }
+
+  #noBtn {
+    background: #f3e5f5;
+    color: #6a1b9a;
+    position: relative;
+    z-index: 3;
+    transition: top 0.15s ease, left 0.15s ease;
+  }
+
+  #noBtn.roaming {
+    position: fixed;
+  }
+
+  .message {
+    margin-top: 20px;
+    font-size: 1.1rem;
+    color: #4a148c;
+    font-weight: bold;
+    min-height: 24px;
+  }
+
+  .hearts {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+  }
+
+  .heart {
+    position: absolute;
+    bottom: -50px;
+    color: #ba68c8;
+    opacity: 0.6;
+    animation: floatUp linear infinite;
+  }
+
+  @keyframes floatUp {
+    0% { transform: translateY(0) rotate(0deg); opacity: 0.6; }
+    100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hearts" id="hearts"></div>
+
+<div class="card">
+  <div class="emoji">💜🍖</div>
+  <h1>Hi Saress!</h1>
+  <p>Would you like to join me for some <b>Cebu Lechon</b> this weekend?<br>Just one little date... 👉👈</p>
+
+  <div class="buttons">
+    <button id="yesBtn" onclick="sayYes()">Yes! 💜</button>
+    <button id="noBtn" onmouseover="moveNo()" onclick="moveNo()">No</button>
+  </div>
+
+  <div class="message" id="message"></div>
+</div>
+
+<script>
+  const noBtn = document.getElementById('noBtn');
+  const yesBtn = document.getElementById('yesBtn');
+  const message = document.getElementById('message');
+
+  let scale = 1;
+  const noPhrases = [
+    "No", "Sure?", "Really?", "Think again!", "Are you sure?",
+    "Last chance!", "Don't miss out!", "Let's eat together?!", "Pretty please?", "Come on 🥺"
+  ];
+  let noCount = 0;
+
+  function moveNo() {
+    if (!noBtn.classList.contains('roaming')) {
+      noBtn.classList.add('roaming');
+    }
+
+    const btnWidth = noBtn.offsetWidth;
+    const btnHeight = noBtn.offsetHeight;
+    const maxX = window.innerWidth - btnWidth - 20;
+    const maxY = window.innerHeight - btnHeight - 20;
+
+    const newX = Math.random() * maxX;
+    const newY = Math.random() * maxY;
+
+    noBtn.style.left = newX + 'px';
+    noBtn.style.top = newY + 'px';
+
+    noCount++;
+    noBtn.textContent = noPhrases[Math.min(noCount, noPhrases.length - 1)];
+
+    scale += 0.15;
+    yesBtn.style.transform = `scale(${scale})`;
+  }
+
+  function sayYes() {
+    message.textContent = "Yay! 💜 See you at our Lechon date, Saress! 🍖✨";
+    noBtn.style.display = 'none';
+  }
+
+  // floating hearts background
+  const heartsContainer = document.getElementById('hearts');
+  for (let i = 0; i < 20; i++) {
+    const heart = document.createElement('div');
+    heart.classList.add('heart');
+    heart.innerHTML = '💜';
+    heart.style.left = Math.random() * 100 + 'vw';
+    heart.style.fontSize = (Math.random() * 20 + 15) + 'px';
+    heart.style.animationDuration = (Math.random() * 6 + 6) + 's';
+    heart.style.animationDelay = (Math.random() * 5) + 's';
+    heartsContainer.appendChild(heart);
+  }
+</script>
+
+</body>
+</html>
